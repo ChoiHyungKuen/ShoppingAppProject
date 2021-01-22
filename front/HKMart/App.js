@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTab from './components/tab';
@@ -9,6 +9,7 @@ import ProductDetail from './components/detail';
 const Stack = createStackNavigator();
 
 const App = () => {
+    Icon.loadFont();
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName='BottomTab'>
