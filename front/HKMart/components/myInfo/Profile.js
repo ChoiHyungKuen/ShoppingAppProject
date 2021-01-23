@@ -5,10 +5,17 @@ import { getWindowHeight } from '../common/CommonFunction';
 const Profile = () => {
     return (
         <View style={{ height: getWindowHeight(20), backgroundColor: '#ffffff'}}>
-            <View style={{ height: '40%', flexDirection: 'row'}}>
+            <View style={{ height: '40%', flexDirection: 'row', paddingLeft: 25}}>
                 <View style={{ width: '85%', justifyContent: 'center' }}>
-                    <View style={{ height: '70%', flexDirection: 'row', alignItems: 'center', paddingLeft: 25 }}>
-                        <Text>최형근</Text><Text>님은</Text><Text>Family</Text><Text>고객입니다.</Text>
+                    <View style={{ height: '65%', flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold'}}>최형근</Text>
+                        <Text>님은 </Text>
+                        <Text style={{ fontSize: 20, color: '#ff0000'}}>FAMILY</Text>
+                        <Text> 고객입니다.</Text>
+                    </View>
+                    <View style={{ height: '35%', flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}><Text>등급혜택 보기</Text><Icon name='play' size={12}/></View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', left: 10 }}><Text>내 정보 관리</Text><Icon name='play' size={12}/></View>
                     </View>
                 </View>
                 <View style={{ width: '15%', justifyContent: 'center', alignItems: 'center' }}>
