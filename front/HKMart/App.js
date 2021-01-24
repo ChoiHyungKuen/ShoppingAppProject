@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTab from './components/tab';
 import ProductDetail from './components/detail';
+import Login from './components/login';
 import { Provider } from 'react-redux';
 import { store } from './store/configureStore';
-
 
 const Stack = createStackNavigator();
 
@@ -20,6 +20,10 @@ const App = () => {
                         name='ProductDetail'
                         component={ProductDetail}
                         options={{ headerShown: false }}/>
+                    <Stack.Screen 
+                        name='Login'
+                        component={Login}
+                        options={{ headerShown: false }} />    
                     <Stack.Screen 
                         name='BottomTab'
                         component={BottomTab}

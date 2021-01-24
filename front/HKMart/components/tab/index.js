@@ -13,7 +13,7 @@ import Search from '../search';
 
 const Tab = createMaterialTopTabNavigator();
 
-const BottomTab = () => {
+const BottomTab = ({ navigation }) => {
     return (
         <>
             <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }}/>

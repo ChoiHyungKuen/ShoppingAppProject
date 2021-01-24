@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getWindowHeight } from '../common/CommonFunction';
 const Profile = () => {
     return (
-        <View style={{ height: getWindowHeight(20), backgroundColor: '#ffffff'}}>
+        <>
             <View style={{ height: '40%', flexDirection: 'row', paddingLeft: 25}}>
                 <View style={{ width: '85%', justifyContent: 'center' }}>
                     <View style={{ height: '65%', flexDirection: 'row', alignItems: 'center' }}>
@@ -35,7 +35,7 @@ const Profile = () => {
                     </View>
                 </View>
             </View>
-        </View>
+        </>
     );
 }
 

@@ -6,33 +6,32 @@ import { getWindowHeight } from '../common/CommonFunction';
 import Product from './Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadProducts } from '../../reducers/productsSlice';
+import { loadADImage, loadEventImages } from '../../reducers/mainSlice';
 
 const Main = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { products } =  useSelector(state => state.products)
-    console.log(faker.commerce.productMaterial());
-    const [images, setImages] = useState([
-        "https://source.unsplash.com/1024x768/?nature",
-        "https://source.unsplash.com/1024x768/?water",
-        "https://source.unsplash.com/1024x768/?girl",
-        "https://source.unsplash.com/1024x768/?tree" // Network image
-    ]);
+    const { products } =  useSelector(state => state.products);
+    const { adImagePath, eventImagePath } =  useSelector(state => state.main);
+
     useEffect(() => {
         dispatch(loadProducts());
+        dispatch(loadADImage());
+        dispatch(loadEventImages());
     }, []);
-    return (
-        <ScrollView style={{ flex: 1}}>
+
+    return ( 
+        <ScrollView style={{ flex: 1 }}>
             <ImageBackground
                 style={{ height: getWindowHeight(30), width:'100%'}}
                 source={{
-                    uri: 'https://source.unsplash.com/1024x768/?ad',
+                    uri: adImagePath,
                 }}
                 resizeMode="cover">
             </ImageBackground>
             <View style={{ height: getWindowHeight(30)}}>
                 <SliderBox
                     autoplayDelay={2000}
-                    images={images}
+                    images={eventImagePath}
                     autoplay
                     circleLoop
                     paginationBoxVerticalPadding={10}
