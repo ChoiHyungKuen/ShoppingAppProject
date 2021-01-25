@@ -8,7 +8,13 @@ export const logIn = createAsyncThunk(
     async (data) => {
         try {
             // const response = await ...
-            return null
+            return {
+                email: data.email,
+                name: 'TEST',
+                HKPoint: 1500,
+                couponCount: 4,
+                rank: 'Silver'
+            }
         } catch(err) {
             return err;
         }

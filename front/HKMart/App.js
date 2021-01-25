@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTab from './components/tab';
 import ProductDetail from './components/detail';
 import Login from './components/login';
+import Register from './components/register';
 import { Provider } from 'react-redux';
 import { store } from './store/configureStore';
 
@@ -23,6 +24,10 @@ const App = () => {
                     <Stack.Screen 
                         name='Login'
                         component={Login}
+                        options={{ headerShown: false }} />    
+                    <Stack.Screen 
+                        name='Register'
+                        component={Register}
                         options={{ headerShown: false }} />    
                     <Stack.Screen 
                         name='BottomTab'

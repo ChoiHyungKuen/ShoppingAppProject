@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MyInfo = ({ navigation }) => {
     const { myInfo } =  useSelector(state =>state.user);
-
     const onClickLogin = useCallback(() => {
         navigation.navigate('Login');
     }, []);
@@ -18,7 +17,7 @@ const MyInfo = ({ navigation }) => {
         <View style={{ flex: 1 }}>
             <View style={{ height: getWindowHeight(20), backgroundColor: '#ffffff'}}>
                 {
-                    myInfo != null ? <Profile /> 
+                    myInfo != null ? <Profile myInfo={myInfo}/> 
                     : 
                     <>
                         <View style={{ height: '40%', justifyContent: 'flex-end', paddingLeft: 25}}>

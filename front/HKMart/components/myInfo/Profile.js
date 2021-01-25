@@ -2,15 +2,15 @@ import React from 'react'
 import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getWindowHeight } from '../common/CommonFunction';
-const Profile = () => {
+const Profile = ({ myInfo }) => {
     return (
         <>
             <View style={{ height: '40%', flexDirection: 'row', paddingLeft: 25}}>
                 <View style={{ width: '85%', justifyContent: 'center' }}>
                     <View style={{ height: '65%', flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold'}}>최형근</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold'}}>{myInfo.name}</Text>
                         <Text>님은 </Text>
-                        <Text style={{ fontSize: 20, color: '#ff0000'}}>FAMILY</Text>
+                        <Text style={{ fontSize: 20, color: '#ff0000'}}>{myInfo.rank}</Text>
                         <Text> 고객입니다.</Text>
                     </View>
                     <View style={{ height: '35%', flexDirection: 'row' }}>
@@ -27,11 +27,11 @@ const Profile = () => {
                 <View style={{ flexDirection: 'row', width: '90%', height: '80%', borderRadius: 10, alignItems: 'center', backgroundColor: '#e8e8e8' }}>
                     <View style={{ width: '50%', height: '70%', borderRightWidth: 1, borderRightColor: '#c0c0c0', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 13 }}>HK-포인트</Text>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>0P</Text>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{myInfo.HKPoint}P</Text>
                     </View>
                     <View style={{ width: '50%', height: '70%', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 13 }}>할인쿠폰</Text>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>0장</Text>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{myInfo.couponCount}장</Text>
                     </View>
                 </View>
             </View>
