@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { Button, ScrollView, Text, View, Dimensions, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addCart } from '../../reducers/userSlice';
 import ProductHeader from '../header/ProductHeader';
 
 const windowSize = Dimensions.get('window');
@@ -11,9 +13,11 @@ const getHeight = (height) => {
     return windowSize.height * (height / 100); 
 }
 const ProductDetail = ({ route, navigation }) => {
-
+    const dispatch = useDispatch();
     const { product } = route.params;
-    
+    const onAddCart = useCallback(() => {
+        dispatch(addCart(product));
+    }, [])
     return (
         <View style={{ flex:1 }}>
             <ProductHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
@@ -55,9 +59,10 @@ const ProductDetail = ({ route, navigation }) => {
                 </View>
                     
             </ScrollView>
-            <View style={{ flex:.1, borderWidth:1, justifyContent: 'center' }}>
+            <View style={{ flex:.1, flexDirection: 'row', borderWidth:1, justifyContent: 'center' }}>
 
                 <Button title="구매하기"></Button>
+                <Button title="카트추가" onPress={onAddCart}></Button>
             </View>
         </View>
     );
