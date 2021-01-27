@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTab from './components/tab';
 import ProductDetail from './components/detail';
+import Cart from './components/cart';
 import Login from './components/login';
 import Register from './components/register';
 import { Provider } from 'react-redux';
@@ -21,6 +22,10 @@ const App = () => {
                         name='ProductDetail'
                         component={ProductDetail}
                         options={{ headerShown: false }}/>
+                        <Stack.Screen 
+                            name='Cart'
+                            component={Cart}
+                            options={{ headerShown: false }} />    
                     <Stack.Screen 
                         name='Login'
                         component={Login}

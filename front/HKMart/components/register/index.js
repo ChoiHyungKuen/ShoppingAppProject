@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
 import { getWindowHeight } from '../common/CommonFunction';
 import ProductHeader from '../header/ProductHeader';
-import { register } from '../../reducers/userSlice';
+import { register, registerDone } from '../../reducers/userSlice';
 const Register = ({ navigation }) => {
     const dispatch = useDispatch();
     const { onRegisterDone } = useSelector(state => state.user);
@@ -18,7 +18,8 @@ const Register = ({ navigation }) => {
     useEffect(() => {
         if(onRegisterDone) {
             alert('회원가입 되었습니다.');
-            navigation.goBack();
+            navigation.replace('Login');
+            dispatch(registerDone());
         }
     }, [onRegisterDone]);
 

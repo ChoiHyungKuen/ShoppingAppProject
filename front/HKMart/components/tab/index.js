@@ -16,7 +16,7 @@ const Tab = createMaterialTopTabNavigator();
 const BottomTab = ({ navigation }) => {
     return (
         <>
-            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }}/>
+            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
             <Tab.Navigator
                 style={{ flex: .94 }}
                 tabBarOptions={{ 

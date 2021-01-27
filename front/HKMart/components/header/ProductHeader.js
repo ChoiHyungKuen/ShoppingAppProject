@@ -9,7 +9,7 @@ const ProductHeader = ( { style, navigation } ) => {
     });
 
     return (
-        <SafeAreaView style={style}>
+        <SafeAreaView style={[{flex: .06, flexDirection: 'row', backgroundColor: '#ffffff'}, style]}>
             <View style={{ flexDirection: 'row', width: '30%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                 <TouchableOpacity 
                     style={{ width: '50%', justifyContent: 'center', alignItems: 'center' }}

@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
     myInfo: null,
     cart: [],
-    onRegisterDone: false
+    onRegisterDone: false,
+    onAddCartDone: false,
+    onRemoveCartDone: false
 }
 
 export const logIn = createAsyncThunk(
@@ -11,6 +13,7 @@ export const logIn = createAsyncThunk(
         try {
             // const response = await ...
             return {
+                id: 1,
                 email: data.email,
                 name: 'TEST',
                 HKPoint: 1500,
@@ -43,18 +46,46 @@ export const addCart = createAsyncThunk(
     async (data) => {
         try {
             // const response = await ...
-            return {
-
-            }
+            console.log('카트 ', data)
+            return data;
         } catch(err) {
             return err;
         }
     }
 );
 
+
+export const removeCart = createAsyncThunk(
+    'user/removeCart',
+    async (data) => {
+        try {
+            // const response = await ...
+            console.log('카트 ', data)
+            //나중에는 삭제된 데이터의 id가 옴
+            return data;
+        } catch(err) {
+            return err;
+        }
+    }
+);
+
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
+    reducers: {
+        registerDone(state) {
+            state.onRegisterDone = false;
+        },
+        addCartDone(state) {
+
+            state.onAddCartDone = false;
+        },
+        removeCartDone(state) {
+
+            state.onRemoveCartDone = false;
+        }
+    },
     extraReducers: {
         [logIn.fulfilled]: (state, action) => {
             // Add user to the state array
@@ -63,11 +94,19 @@ export const userSlice = createSlice({
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
             state.cart.push(action.payload);
+            state.onAddCartDone = true;
         },
         [register.fulfilled]: (state, action) => {
             // Add user to the state array
             state.onRegisterDone = action.payload;
+        },
+        [removeCart.fulfilled]: (state, action) => {
+            // Add user to the state array
+            state.cart = state.cart.filter((item) => item.id !== action.payload);
+            state.onRemoveCartDone = true;
         }
     }
 
 });
+
+export const { registerDone, addCartDone, removeCartDone } = userSlice.actions;

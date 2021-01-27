@@ -13,6 +13,7 @@ const Main = ({ navigation }) => {
     const { products } =  useSelector(state => state.products);
     const { adImagePath, eventImagePath } =  useSelector(state => state.main);
 
+    
     useEffect(() => {
         dispatch(loadProducts());
         dispatch(loadADImage());

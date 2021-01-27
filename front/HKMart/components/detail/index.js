@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { Button, ScrollView, Text, View, Dimensions, Image } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { addCart } from '../../reducers/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCart, addCartDone } from '../../reducers/userSlice';
 import ProductHeader from '../header/ProductHeader';
 
 const windowSize = Dimensions.get('window');
@@ -14,7 +14,16 @@ const getHeight = (height) => {
 }
 const ProductDetail = ({ route, navigation }) => {
     const dispatch = useDispatch();
+    const { onAddCartDone } = useSelector(state => state.user);
     const { product } = route.params;
+
+    useEffect(() => {
+        if(onAddCartDone) {
+            alert('상품이 카트에 추가되었습니다.');
+            dispatch(addCartDone());
+        }
+    }, [onAddCartDone]);
+
     const onAddCart = useCallback(() => {
         dispatch(addCart(product));
     }, [])
