@@ -23,8 +23,8 @@ const MainHeader = ( { style, navigation } ) => {
             </View>
             <View style={{ flexDirection: 'row', width: '20%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon name='cart-outline' size={30} onPress={onClickCartBtn}/>
-                <View style={{ position: 'absolute', top: 0, right: 20, width: 18, height: 18, borderRadius: 9, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{ color: 'white', fontSize: 10}}>{cart.length}</Text>
+                <View style={{ position: 'absolute', top: 0, right: 20, width: 20, height: 20, borderRadius: 10, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold'}}>{cart.length}</Text>
                 </View>
             </View>
         </SafeAreaView>

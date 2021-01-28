@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect} from 'react';
-import { Button, ScrollView, Text, View, Dimensions, Image } from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import { Button, ScrollView, Text, View, Dimensions, Image, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart, addCartDone } from '../../reducers/userSlice';
 import ProductHeader from '../header/ProductHeader';
@@ -16,6 +16,7 @@ const ProductDetail = ({ route, navigation }) => {
     const dispatch = useDispatch();
     const { onAddCartDone } = useSelector(state => state.user);
     const { product } = route.params;
+    const [showMenu, setShowMenu] = useState(false)
 
     useEffect(() => {
         if(onAddCartDone) {
@@ -29,8 +30,8 @@ const ProductDetail = ({ route, navigation }) => {
     }, [])
     return (
         <View style={{ flex:1 }}>
-            <ProductHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
-            <ScrollView style={{ flex:.84 }}>
+            <ProductHeader style={{ flex: getHeight(6), flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
+            <ScrollView style={{ height: showMenu ? getHeight(30) : getHeight(80), backgroundColor: ('#ffffff')}}>
                 <View style={{ height: getHeight(30), backgroundColor: 'white' }}>
                     <Image
                         style={{ width: '100%',height:'90%'}}
@@ -66,13 +67,33 @@ const ProductDetail = ({ route, navigation }) => {
                     <Text>{product.description}</Text>
                     <Text>{product.description}</Text>
                 </View>
-                    
             </ScrollView>
-            <View style={{ flex:.1, flexDirection: 'row', borderWidth:1, justifyContent: 'center' }}>
-
-                <Button title="구매하기"></Button>
-                <Button title="카트추가" onPress={onAddCart}></Button>
+            <View style={{ flex: showMenu ? getHeight(64) : getHeight(14), width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ height: '10%', flexDirection: 'row' }}>
+                    <View style={{ width: '45%', backgroundColor:'rgba(0,0,0,0)' }}></View>
+                    <View style={{ width: '10%', backgroundColor:'rgba(0,0,0,0)' }}></View>
+                    <View style={{ width: '45%', backgroundColor:'rgba(0,0,0,0)' }}></View>
+                </View>
+                <View style={{ height: '90%', flexDirection: 'row' }}>
+                    <Button title="구매하기" onPress={() => setShowMenu(prevState => setShowMenu(!prevState))}></Button>
+                    <Button title="카트추가" onPress={onAddCart}></Button>
+                </View>
             </View>
+            {/* <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showMenu}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}>
+                <View style={{ height: '20%', backgroundColor: 'rgba(0,0,0,0)', justifyContent: 'flex-end' }}>
+                    <View style={{ width: '100%', height: '20%',  flexDirection: 'row' }}>
+                    <View style={{ width: '40%', height: '100%', backgroundColor:'rgba(0,0,0,0)' }}></View>
+                    <View style={{ width: '20%', height: '100%', backgroundColor:'black' }}></View>
+                    <View style={{ width: '40%', height: '100%', backgroundColor:'rgba(0,0,0,0)' }}></View>
+                    </View>
+                </View>
+            </Modal> */}
         </View>
     );
 }
