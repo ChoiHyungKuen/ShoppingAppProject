@@ -28,7 +28,8 @@ const Cart = ({ navigation }) => {
 
     onClickRemoveBtn = useCallback((id) => () => {
         dispatch(removeCart(id));
-    });
+    }, [cart]);
+
 
     const renderList = ({item, index}) => (
         <View style={{ flex: 1, height: getWindowHeight(20), borderBottomWidth: 1, backgroundColor: '#ffffff'}}>
@@ -46,15 +47,20 @@ const Cart = ({ navigation }) => {
                 />
                 <View style={{ width: '60%', height: '90%', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ width: '90%', height: '60%', justifyContent: 'center' }}>
-                        <Text>${item.price}</Text>
+                        <Text>${item.price * item.qty}</Text>
                     </View>
 
-                    <View style={{ width: '90%', height: '40%'}}>
+                    <View style={{ width: '90%', height: '40%', flexDirection: 'row'}}>
                         <TouchableOpacity 
-                            style={{ width: '30%', height: '50%', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}
+                            style={{ width: '40%', height: '70%', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}
                             onPress={onClickRemoveBtn(item.id)}>
                             <Text>삭제</Text>
+
                         </TouchableOpacity>
+                        <View style={{ width: '40%', height: '70%', flexDirection: 'row', borderWidth: 1, alignItems: 'center', marginLeft: 30 }}>
+                            <View style={{ width: '40%', alignItems: 'center' }}><Text style={{fontSize: 20 }}>{item.qty}</Text></View>
+                        </View>
+
                     </View>
                 </View>
             </View>

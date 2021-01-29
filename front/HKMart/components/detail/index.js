@@ -1,38 +1,17 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import { Button, ScrollView, Text, View, Dimensions, Image, Modal } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCart, addCartDone } from '../../reducers/userSlice';
+import { Button, ScrollView, Text, View, Image, Modal, TouchableOpacity } from 'react-native';
 import ProductHeader from '../header/ProductHeader';
+import PurchaseView from './PurchaseView';
+import { getWindowHeight } from '../common/CommonFunction';
 
-const windowSize = Dimensions.get('window');
-const getWidth = (width) => {
-    return windowSize.width * (width / 100); 
-}
-
-const getHeight = (height) => {
-    return windowSize.height * (height / 100); 
-}
 const ProductDetail = ({ route, navigation }) => {
-    const dispatch = useDispatch();
-    const { onAddCartDone } = useSelector(state => state.user);
     const { product } = route.params;
-    const [showMenu, setShowMenu] = useState(false)
 
-    useEffect(() => {
-        if(onAddCartDone) {
-            alert('상품이 카트에 추가되었습니다.');
-            dispatch(addCartDone());
-        }
-    }, [onAddCartDone]);
-
-    const onAddCart = useCallback(() => {
-        dispatch(addCart(product));
-    }, [])
     return (
         <View style={{ flex:1 }}>
-            <ProductHeader style={{ flex: getHeight(6), flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
-            <ScrollView style={{ height: showMenu ? getHeight(30) : getHeight(80), backgroundColor: ('#ffffff')}}>
-                <View style={{ height: getHeight(30), backgroundColor: 'white' }}>
+            <ProductHeader style={{ flex:.06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
+            <ScrollView style={{ flex: .94, backgroundColor: ('#ffffff') }}>
+                <View style={{ height: getWindowHeight(30), backgroundColor: 'white' }}>
                     <Image
                         style={{ width: '100%',height:'90%'}}
                         source={{
@@ -42,7 +21,7 @@ const ProductDetail = ({ route, navigation }) => {
                     />
                 </View>
 
-                <View style={{ height: getHeight(10), backgroundColor: '#ffffff', paddingLeft: 10 }}>
+                <View style={{ height: getWindowHeight(10), backgroundColor: '#ffffff', paddingLeft: 10 }}>
                     <View style={{ flex: .6, justifyContent: 'center' }}> 
                         <Text>{product.title}</Text>
                     </View>
@@ -50,9 +29,9 @@ const ProductDetail = ({ route, navigation }) => {
                         <Text>${product.price}</Text>
                     </View>
                 </View>
-                <View style={{ height: getHeight(0.5) }}/>
+                <View style={{ height: getWindowHeight(0.5) }}/>
 
-                <View style={{ height: getHeight(500), backgroundColor: '#ffffff', paddingLeft: 10 }}>
+                <View style={{ height: getWindowHeight(500), backgroundColor: '#ffffff', paddingLeft: 10 }}>
                     <Text>{product.description}</Text>
                     <Text>{product.description}</Text>
                     <Text>{product.description}</Text>
@@ -68,17 +47,7 @@ const ProductDetail = ({ route, navigation }) => {
                     <Text>{product.description}</Text>
                 </View>
             </ScrollView>
-            <View style={{ flex: showMenu ? getHeight(64) : getHeight(14), width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ height: '10%', flexDirection: 'row' }}>
-                    <View style={{ width: '45%', backgroundColor:'rgba(0,0,0,0)' }}></View>
-                    <View style={{ width: '10%', backgroundColor:'rgba(0,0,0,0)' }}></View>
-                    <View style={{ width: '45%', backgroundColor:'rgba(0,0,0,0)' }}></View>
-                </View>
-                <View style={{ height: '90%', flexDirection: 'row' }}>
-                    <Button title="구매하기" onPress={() => setShowMenu(prevState => setShowMenu(!prevState))}></Button>
-                    <Button title="카트추가" onPress={onAddCart}></Button>
-                </View>
-            </View>
+            <PurchaseView product={product}/>
             {/* <Modal
                 animationType="slide"
                 transparent={true}
