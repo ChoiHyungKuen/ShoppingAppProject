@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MainHeader from '../header/MainHeader';
+import { StackActions } from '@react-navigation/native';
 
 import Main from '../main';
 import History from '../history';
@@ -16,7 +17,7 @@ const Tab = createMaterialTopTabNavigator();
 const BottomTab = ({ navigation }) => {
     return (
         <>
-            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation}/>
+            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation} currentScreenName='Main'/>
             <Tab.Navigator
                 style={{ flex: .94 }}
                 tabBarOptions={{ 
@@ -40,7 +41,18 @@ const BottomTab = ({ navigation }) => {
                         </View>)
                 }}/>
 
-                <Tab.Screen name='Search' component={Search} 
+                <Tab.Screen name='Search' component={({navigation}) => { 
+                            useEffect(() => {
+                                const unsubscribe = navigation.addListener('tabPress', e => {
+                                    e.preventDefault();
+                                    const pushAction =StackActions.push('Search');
+                                    navigation.dispatch(pushAction);
+                                    // navigation.navigate('Search')
+                                  });
+                                  return unsubscribe;
+                            }, [navigation])
+                            return (<></>)
+                         }} 
                         options={{ 
                             title: props=> null,
                             tabBarIcon: ({ focused }) => (<View style={{ height: '100%', justifyContent: 'flex-end', alignItems: 'center'}}>

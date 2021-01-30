@@ -12,19 +12,23 @@ const PurchaseView = ( { style, navigation, product } ) => {
     const [showMenu, setShowMenu] = useState(false);
     const [qty, setQty] = useState(1);
     const [totalPrice, setTotalPrice] = useState(product.price);
-    const pan = useRef(new Animated.ValueXY()).current;
+    const pan = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
     const panResponder = useRef(
         PanResponder.create({
-          onMoveShouldSetPanResponder: () => true,
-          onPanResponderMove: (event, gestureState) => {
-              return  Animated.event([
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderMove: (event, gestureState) => {
+                return  Animated.event([
                 null,
-                { dx: pan.x, dy: pan.y},
-              ])(event, gestureState)
-          },
-          onPanResponderRelease: () => {
-            Animated.spring(pan, { toValue:  { x: 0, y: 0 }  }).start();
-          }
+                { dx: new Animated.Value(0), dy: pan.y._value < 0 ? new Animated.Value(0) : pan.y }         // dx, dy 리턴하면서 현재위치 갱신해주는듯.. 좌우 고정, 상하에서 위로 올렸을 때 안올라가게 변경
+            ], { useNativeDriver: 0})(event, gestureState)
+            },
+            onPanResponderRelease: () => {  
+                if(pan.y._value > getWindowHeight(18)) {    // 움직이는 위치에서 일정높이 이상으로 움직이면 메뉴 사라지게 변경 
+                    setShowMenu(false);
+                } else {
+                    Animated.spring(pan, { toValue:  { x: 0, y: 0 }, useNativeDriver: false  }).start();
+                }
+            }
         })
       ).current;
 
@@ -62,7 +66,9 @@ const PurchaseView = ( { style, navigation, product } ) => {
     renderPurchaseMenu = () => {
         if(showMenu) {
             return (
-                <>
+                <Animated.View
+                style={{ transform: [{ translateX: pan.x }, { translateY: pan.y }], alignItems: 'center', width: '100%'}}
+                {...panResponder.panHandlers}>
                     <View style={{ height: '7%', flexDirection: 'row' }}>
                         <View style={{ width: '40%', backgroundColor:'rgba(0,0,0,0)' }}/>
                             <TouchableOpacity
@@ -110,15 +116,14 @@ const PurchaseView = ( { style, navigation, product } ) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </>
+            </Animated.View >
             );
         } else {
             return (
                 <>
                     <View style={{ height: '100%', width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor:'#e9e9e9'}}>
-
                         <TouchableOpacity style={{ height: '70%', width: '80%', justifyContent: 'center', alignItems: 'center',borderRadius: 6, backgroundColor: '#ff0000' }}
-                            onPress={() => setShowMenu(true)}>
+                            onPress={() => { Animated.spring(pan, { toValue:  { x: 0, y: 0 }, useNativeDriver: false  }).start();setShowMenu(true)}}>
                             <Text style={{ color: '#ffffff', fontSize: 15 }}>구매하기</Text>
                         </TouchableOpacity>
                     </View>
@@ -127,12 +132,9 @@ const PurchaseView = ( { style, navigation, product } ) => {
         }   
     }
     return (
-        <Animated.View
-            style={{ transform: [{ translateX: pan.x }, { translateY: pan.y }],height: showMenu ? getWindowHeight(35) : getWindowHeight(7), width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0}}
-            
-            {...panResponder.panHandlers}>
+        <View style={{ height: showMenu ? getWindowHeight(35) : getWindowHeight(7), width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0}}>
             {renderPurchaseMenu()}
-        </Animated.View >
+        </View>
     );
 }
 

@@ -7,6 +7,7 @@ import ProductDetail from './components/detail';
 import Cart from './components/cart';
 import Login from './components/login';
 import Register from './components/register';
+import Search from './components/search';
 import { Provider } from 'react-redux';
 import { store } from './store/configureStore';
 
@@ -22,10 +23,10 @@ const App = () => {
                         name='ProductDetail'
                         component={ProductDetail}
                         options={{ headerShown: false }}/>
-                        <Stack.Screen 
-                            name='Cart'
-                            component={Cart}
-                            options={{ headerShown: false }} />    
+                    <Stack.Screen 
+                        name='Cart'
+                        component={Cart}
+                        options={{ headerShown: false }} />    
                     <Stack.Screen 
                         name='Login'
                         component={Login}
@@ -34,6 +35,10 @@ const App = () => {
                         name='Register'
                         component={Register}
                         options={{ headerShown: false }} />    
+                        <Stack.Screen 
+                            name='Search'
+                            component={Search}
+                            options={{ headerShown: false }} />    
                     <Stack.Screen 
                         name='BottomTab'
                         component={BottomTab}

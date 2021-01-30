@@ -5,17 +5,16 @@ import faker from 'faker';
 import { getWindowHeight } from '../common/CommonFunction';
 import Product from './Product';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProducts } from '../../reducers/productsSlice';
-import { loadADImage, loadEventImages } from '../../reducers/mainSlice';
+
+import { loadADImage, loadEventImages,loadMainProducts } from '../../reducers/mainSlice';
 
 const Main = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { products } =  useSelector(state => state.products);
-    const { adImagePath, eventImagePath } =  useSelector(state => state.main);
+    const { adImagePath, eventImagePath, mainProducts } =  useSelector(state => state.main);
 
     
     useEffect(() => {
-        dispatch(loadProducts());
+        dispatch(loadMainProducts());
         dispatch(loadADImage());
         dispatch(loadEventImages());
     }, []);
@@ -40,7 +39,7 @@ const Main = ({ navigation }) => {
                 />
             </View>
             {
-                products && products.map(product => (<Product key={product.id} product={product} navigation={navigation}/>))
+                mainProducts && mainProducts.map(product => (<Product key={product.id} product={product} navigation={navigation}/>))
             }
         </ScrollView>
     );
