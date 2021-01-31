@@ -14,12 +14,12 @@ const History = () => {
     return (
         <View>
             <Text>History</Text>
-            <FlatList 
+            {/* <FlatList 
                 data={hitoryList}
                 renderItem={({item}) => (
                     <View style={{ flex: 1, height: getWindowHeight(20), borderWidth: 1}}><Text>{item.name}</Text></View>
                 )}
-                numColumns={3}/>
+                numColumns={3}/> */}
         </View>
     );
 }

@@ -1,18 +1,34 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, FlatList, Modal } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
 import faker from 'faker';
-import { getWindowHeight } from '../common/CommonFunction';
+import { getWindowHeight, getWindowWidth } from '../common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCart, removeCartDone } from '../../reducers/userSlice';
 import CommonHeader from '../header/CommonHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Picker} from '@react-native-picker/picker';
 
 const Cart = ({ navigation }) => {
     const dispatch = useDispatch();
     const { cart, onRemoveCartDone } =  useSelector(state => state.user);
     const [totalPrice, setTotalPrice] = useState(0);
-
+    const [qty, setQty] = useState(1);
+    const [showPickerIOS, setShowPickerIOS] = useState(false);
+    // const [arr, setArr] = useState(Array.from({ length: 10 }, (_, i) => (i+1)+""));
+    
+    const [qtyList, setQtyList] = useState([
+        {label: '1', value: 1},
+        {label: '2', value: 2},
+        {label: '3', value: 3},
+        {label: '4', value: 4},
+        {label: '5', value: 5},
+        {label: '6', value: 6},
+        {label: '7', value: 7},
+        {label: '8', value: 8},
+        {label: '9', value: 9},
+        {label: '10+', value: 10},
+    ]);
     useEffect(() => {
         let sum = 0;
         cart.map(item => sum += item.price);
@@ -30,6 +46,15 @@ const Cart = ({ navigation }) => {
         dispatch(removeCart(id));
     }, [cart]);
 
+    const renderPickerView = () => {
+        return (
+            <TouchableOpacity 
+                style={{ width: '40%', height: '70%', justifyContent: 'center', alignItems: 'center',borderWidth: 1 }}
+                onPress={() => setShowPickerIOS(true)}>
+                <Text>{qty}</Text>
+            </TouchableOpacity>
+        );
+    }
 
     const renderList = ({item, index}) => (
         <View style={{ flex: 1, height: getWindowHeight(20), borderBottomWidth: 1, backgroundColor: '#ffffff'}}>
@@ -57,10 +82,7 @@ const Cart = ({ navigation }) => {
                             <Text>삭제</Text>
 
                         </TouchableOpacity>
-                        <View style={{ width: '40%', height: '70%', flexDirection: 'row', borderWidth: 1, alignItems: 'center', marginLeft: 30 }}>
-                            <View style={{ width: '40%', alignItems: 'center' }}><Text style={{fontSize: 20 }}>{item.qty}</Text></View>
-                        </View>
-
+                        {renderPickerView()}
                     </View>
                 </View>
             </View>
@@ -111,6 +133,29 @@ const Cart = ({ navigation }) => {
                 </View>
                 <View style={{ height: '40%' }}></View>
             </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showPickerIOS}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={{ width: getWindowWidth(100), height: getWindowHeight(100), backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center'  }}>
+                    <View style={{ width: getWindowWidth(100), height: getWindowHeight(50), backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center' }}>
+                    <Picker
+                            selectedValue={qty}
+                            style={{width:'100%', height: '100'}}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setQty(itemValue)
+                            }>
+                            {
+                                qtyList.map(item => <Picker.Item label={item.label} value={item.value} />)
+                            }
+                            </Picker>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
