@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, ScrollView, Text, View, Image, TouchableOpacity } from 'react-native';
 import { getWindowHeight } from '../common/CommonFunction';
 
-const Product = ({ product, navigation }) => {
+const ProductItem = ({ product, navigation }) => {
 
     return (
         <>
@@ -32,4 +32,4 @@ const Product = ({ product, navigation }) => {
     );
 }
 
-export default Product;
+export default ProductItem;

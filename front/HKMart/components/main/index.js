@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity } from
 import { SliderBox } from 'react-native-image-slider-box';
 import faker from 'faker';
 import { getWindowHeight } from '../common/CommonFunction';
-import Product from './Product';
+import ProductItem from './ProductItem';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadADImage, loadEventImages,loadMainProducts } from '../../reducers/mainSlice';
@@ -39,7 +39,7 @@ const Main = ({ navigation }) => {
                 />
             </View>
             {
-                mainProducts && mainProducts.map(product => (<Product key={product.id} product={product} navigation={navigation}/>))
+                mainProducts && mainProducts.map(product => (<ProductItem key={product.id} product={product} navigation={navigation}/>))
             }
         </ScrollView>
     );

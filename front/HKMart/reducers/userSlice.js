@@ -40,6 +40,19 @@ export const register = createAsyncThunk(
     }
 );
 
+export const changeCartQty = createAsyncThunk(
+    'user/changeCartQty',
+    async (data) => {
+        try {
+            // const response = await ...
+            console.log('카트 ', data)
+            return data;
+        } catch(err) {
+            return err;
+        }
+    }
+);
+
 
 export const addCart = createAsyncThunk(
     'user/addCart',
@@ -84,6 +97,13 @@ export const userSlice = createSlice({
         removeCartDone(state) {
 
             state.onRemoveCartDone = false;
+        },
+        toggleCheckCartItem(state, action) {
+            let data = state.cart.find((item) => item.id === action.payload.id);
+            data.checked = action.payload.checked;
+        },
+        toggleAllCheckCartItem(state, action) {
+            state.cart = state.cart.map((item) => { item.checked = action.payload; return item; });
         }
     },
     extraReducers: {
@@ -93,6 +113,7 @@ export const userSlice = createSlice({
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
+            action.payload.checked = false;
             state.cart.push(action.payload);
             state.onAddCartDone = true;
         },
@@ -104,9 +125,23 @@ export const userSlice = createSlice({
             // Add user to the state array
             state.cart = state.cart.filter((item) => item.id !== action.payload);
             state.onRemoveCartDone = true;
+        },
+        [changeCartQty.fulfilled]: (state, action) => {
+            // Add user to the state array
+            let id = action.payload.id;
+            let qty= action.payload.qty;
+            let data = state.cart.find((item) => item.id === id);
+            data.qty = qty;
+        },
+        [changeCartQty.fulfilled]: (state, action) => {
+            // Add user to the state array
+            let id = action.payload.id;
+            let qty= action.payload.qty;
+            let data = state.cart.find((item) => item.id === id);
+            data.qty = qty;
         }
     }
 
 });
 
-export const { registerDone, addCartDone, removeCartDone } = userSlice.actions;
+export const { registerDone, addCartDone, removeCartDone, toggleCheckCartItem, toggleAllCheckCartItem } = userSlice.actions;

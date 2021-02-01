@@ -1,34 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, FlatList, TextInput } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
 import faker from 'faker';
 import { getWindowHeight, getWindowWidth } from '../common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeCart, removeCartDone } from '../../reducers/userSlice';
+import { removeCartDone, toggleAllCheckCartItem } from '../../reducers/userSlice';
 import CommonHeader from '../header/CommonHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Picker} from '@react-native-picker/picker';
+import CartItem from './CartItem';
+import CheckBox from '@react-native-community/checkbox';
 
 const Cart = ({ navigation }) => {
     const dispatch = useDispatch();
     const { cart, onRemoveCartDone } =  useSelector(state => state.user);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [qty, setQty] = useState(1);
-    const [showPickerIOS, setShowPickerIOS] = useState(false);
+    const [allChecked, setAllChecked] = useState(cart.length > 0 && cart.length === cart.filter(item => item.checked === true).length);
     // const [arr, setArr] = useState(Array.from({ length: 10 }, (_, i) => (i+1)+""));
-    
-    const [qtyList, setQtyList] = useState([
-        {label: '1', value: 1},
-        {label: '2', value: 2},
-        {label: '3', value: 3},
-        {label: '4', value: 4},
-        {label: '5', value: 5},
-        {label: '6', value: 6},
-        {label: '7', value: 7},
-        {label: '8', value: 8},
-        {label: '9', value: 9},
-        {label: '10+', value: 10},
-    ]);
     useEffect(() => {
         let sum = 0;
         cart.map(item => sum += item.price);
@@ -42,51 +29,9 @@ const Cart = ({ navigation }) => {
         }
     }, [onRemoveCartDone]);
 
-    onClickRemoveBtn = useCallback((id) => () => {
-        dispatch(removeCart(id));
-    }, [cart]);
-
-    const renderPickerView = () => {
-        return (
-            <TouchableOpacity 
-                style={{ width: '40%', height: '70%', justifyContent: 'center', alignItems: 'center',borderWidth: 1 }}
-                onPress={() => setShowPickerIOS(true)}>
-                <Text>{qty}</Text>
-            </TouchableOpacity>
-        );
-    }
 
     const renderList = ({item, index}) => (
-        <View style={{ flex: 1, height: getWindowHeight(20), borderBottomWidth: 1, backgroundColor: '#ffffff'}}>
-            <View style={{ height: '25%', justifyContent: 'center' }}>
-
-                <Text style={{ left: 10 }}>{item.title}</Text>
-            </View>
-            <View style={{ height: '75%', flexDirection: 'row', justifyContent: 'center' }}>
-                <Image
-                    style={{ width: '40%',height: '90%'}}
-                    source={{
-                        uri: item.image,
-                    }}
-                    resizeMode="contain"
-                />
-                <View style={{ width: '60%', height: '90%', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ width: '90%', height: '60%', justifyContent: 'center' }}>
-                        <Text>${item.price * item.qty}</Text>
-                    </View>
-
-                    <View style={{ width: '90%', height: '40%', flexDirection: 'row'}}>
-                        <TouchableOpacity 
-                            style={{ width: '40%', height: '70%', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}
-                            onPress={onClickRemoveBtn(item.id)}>
-                            <Text>삭제</Text>
-
-                        </TouchableOpacity>
-                        {renderPickerView()}
-                    </View>
-                </View>
-            </View>
-        </View>
+        <CartItem cart={item} index={index}/>
     );
 
     const renderEmptyList = () => (
@@ -97,21 +42,30 @@ const Cart = ({ navigation }) => {
         </View>
     );
 
-    
+    const onToggleAllCheckBox = useCallback((checked) => {
+        dispatch(toggleAllCheckCartItem(checked))
+    }, [allChecked]); 
 
     return ( 
         <View style={{ flex: 1 }}>
             <CommonHeader title={'장바구니'} navigation={navigation}/>
-            <View style={{ flex:.84 }}>
+            <View style={{ flex: .1, flexDirection: 'row' }}>
+                <CheckBox
+                        style={{ width: 16, height: 16}}
+                        value={allChecked}
+                        boxType='square'
+                        onValueChange={onToggleAllCheckBox}/>
+            </View>
+            <View style={{ flex: .7 }}>
                 <FlatList 
                     data={cart}
                     renderItem={renderList}
+                    keyExtractor={(item, index) => new Date().getTime().toString() + (Math.floor(Math.random() * Math.floor(new Date().getTime()))).toString()}
                     ListEmptyComponent={renderEmptyList}/>
             </View>
-            <View style={{ flex: .1, backgroundColor: '#ffffff'}}>
-                <View style={{ height: '60%', justifyContent: 'space-around' }}>
+            <View style={{ flex: .14, justifyContent: 'flex-end'}}>
+                <View style={{ height: '50%', backgroundColor: '#ffffff' }}>
                     <View style={{ height: '50%', flexDirection: 'row', alignItems: 'center' }}>
-
                         <View style={{ width: '30%' }}></View>
                         <View style={{ width: '30%' }}>
                             <Text>총 상품 가격</Text>
@@ -131,31 +85,10 @@ const Cart = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                <View style={{ height: '40%' }}></View>
+                <TouchableOpacity style={{ height: '45%', justifyContent: 'center', alignItems: 'center', backgroundColor: '#0000ff' }}>
+                    <Text style={{ color: '#ffffff', fontSize: 18 }}>구매하기()</Text>
+                </TouchableOpacity>
             </View>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={showPickerIOS}
-                onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                }}
-            >
-                <View style={{ width: getWindowWidth(100), height: getWindowHeight(100), backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center'  }}>
-                    <View style={{ width: getWindowWidth(100), height: getWindowHeight(50), backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center' }}>
-                    <Picker
-                            selectedValue={qty}
-                            style={{width:'100%', height: '100'}}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setQty(itemValue)
-                            }>
-                            {
-                                qtyList.map(item => <Picker.Item label={item.label} value={item.value} />)
-                            }
-                            </Picker>
-                    </View>
-                </View>
-            </Modal>
         </View>
     );
 }
