@@ -82,6 +82,20 @@ export const removeCart = createAsyncThunk(
     }
 );
 
+export const removeSelectedCartItem = createAsyncThunk(
+    'user/removeSelectedCartItem',
+    async (data) => {
+        try {
+            // const response = await ...
+            console.log('카트 ', data)
+            //나중에는 삭제된 데이터의 id가 옴
+            return { 'state': 'success'};
+        } catch(err) {
+            return err;
+        }
+    }
+);
+
 
 export const userSlice = createSlice({
     name: 'user',
@@ -139,6 +153,10 @@ export const userSlice = createSlice({
             let qty= action.payload.qty;
             let data = state.cart.find((item) => item.id === id);
             data.qty = qty;
+        },
+        [removeSelectedCartItem.fulfilled]: (state, action) => {
+            state.cart = state.cart.filter(item => !item.checked);
+            state.onRemoveCartDone = true;
         }
     }
 

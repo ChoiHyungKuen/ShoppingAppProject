@@ -6,13 +6,15 @@ import userInput from '../../hooks/userInput';
 import { logIn } from '../../reducers/userSlice';
 import { getWindowHeight } from '../common/CommonFunction';
 import ProductHeader from '../header/ProductHeader';
+import CryptoJS from 'react-native-crypto-js';
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const [email, onChangeEmail, setEmail] = userInput('');
     const [password, onChangePassword, setPassword] = userInput('');
 
     const onClickLoginBtn = useCallback(() => {
-        dispatch(logIn({ email, password }));
+        let encPassword = CryptoJS.AES.encrypt(password, 'test').toString();
+        dispatch(logIn({ email, encPassword }));
         navigation.goBack();
     }, [email, password]);
 

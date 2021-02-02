@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Animated, PanResponder} from 'react-native';
+import { View, Text, SafeAreaView, Alert, TouchableOpacity, Animated, PanResponder} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart, addCartDone } from '../../reducers/userSlice';
@@ -32,7 +32,6 @@ const PurchaseView = ( { style, navigation, product } ) => {
         })
       ).current;
 
-
     onAddQty = useCallback(() => {
         setQty(prevQty => prevQty + 1);        
         
@@ -40,7 +39,7 @@ const PurchaseView = ( { style, navigation, product } ) => {
 
     onMinusQty = useCallback(() => {
         if(qty === 1) {
-            alert('수량은 1개보다 작을 수 없습니다.');
+            Alert.alert('경고', '수량은 1개보다 작을 수 없습니다.');
             return ;
         }
         setQty(prevQty => prevQty - 1);  
@@ -49,7 +48,7 @@ const PurchaseView = ( { style, navigation, product } ) => {
     const onAddCart = useCallback(() => {
         let purchaseInfo = { ...product, qty};
         dispatch(addCart(purchaseInfo));
-    }, [qty, totalPrice]);
+    }, [qty, totalPrice, product]);
 
 
     useEffect(() => {
@@ -58,7 +57,7 @@ const PurchaseView = ( { style, navigation, product } ) => {
 
     useEffect(() => {
         if(onAddCartDone) {
-            alert('상품이 카트에 추가되었습니다.');
+            Alert.alert('알림', '상품이 카트에 추가되었습니다.');
             dispatch(addCartDone());
         }
     }, [onAddCartDone]);

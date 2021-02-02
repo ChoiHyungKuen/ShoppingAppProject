@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Text, View, ScrollView, Image, ImageBackground, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { Text, View, ScrollView, Image, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { getWindowHeight, getWindowWidth } from '../common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCart, changeCartQty, toggleCheckCartItem } from '../../reducers/userSlice';
 import CustomPicker from '../common/CustomPicker';
 import CheckBox from '@react-native-community/checkbox';
 
-const CartItem = ({ cart, index }) => {
+const CartItem = memo(({ cart, index, navigation }) => {
 
+
+    // cartCheckedBox 로 따로 나눠서 관리해볼까?? 이미지 깜빡임 없애고 싶음
     const dispatch = useDispatch();
-    const [showPicker, setShowPicker] = useState(true);
+    const [showPicker, setShowPicker] = useState(cart.qty < 10);  // 한번더 갱신됨 머가문제인지 모름..
     const [qtyState, setQtyState] = useState(String(cart.qty));
 
     const [qtyList, setQtyList] = useState([
@@ -25,15 +27,14 @@ const CartItem = ({ cart, index }) => {
         {label: '10+', value: 10},
     ]);
 
-
     const onChangeQtyState = useCallback((value) => {
         if(parseInt(value) > 10) {
-            alert('수량이 10보다 클 수는 없습니다.');
+            Alert.alert('경고', '수량이 10보다 클 수는 없습니다.');
             return ;
         }
+
         setQtyState(value);
         dispatch(changeCartQty({ id: cart.id, qty: value}));
-
     }, [qtyState]);
 
     const onChangeQtyInput = useCallback((value) => {
@@ -44,29 +45,32 @@ const CartItem = ({ cart, index }) => {
         dispatch(removeCart(id));
     }, []);
 
-    const onChanePickerValue = (id) => (itemValue) => {
+    const onChanePickerValue = useCallback((id) => (itemValue) => {
         if(itemValue >= 10) {
             setShowPicker(false);
             setQtyState(String(itemValue));
         }
         dispatch(changeCartQty({ id, qty: itemValue}));
-    }
+    }, [showPicker, cart.qty])
 
     const onToggleCheckBox = useCallback((checked) => {
         dispatch(toggleCheckCartItem({ id: cart.id, checked }))
     }, [cart.checked]); 
 
+    const onGoProductDetail = useCallback(() => {
+        navigation.push('ProductDetail', { product: { id: cart.id}});
+    }, []); 
+
     return (
         <View style={{ flex: 1, height: getWindowHeight(20), borderBottomWidth: 1, borderBottomColor: '#e5e5e5', backgroundColor: '#ffffff'}}>
-            <TouchableOpacity 
-                style={{ height: '25%', flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
+            <View style={{ height: '25%', flexDirection: 'row', alignItems: 'center', marginTop: 5, left: 10 }}>
                 <CheckBox
-                    style={{ width: 16, height: 16}}
+                    style={{ width: 18, height: 18}}
                     value={cart.checked}
                     boxType='square'
                     onValueChange={onToggleCheckBox}/>
-                <Text style={{ left: 10 }}>{cart.title}</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={onGoProductDetail}><Text style={{ left: 10 }}>{cart.title}</Text></TouchableOpacity>
+            </View>
             <View style={{ height: '75%', flexDirection: 'row', justifyContent: 'center' }}>
                 <Image
                     style={{ width: '30%',height: '90%'}}
@@ -120,6 +124,6 @@ const CartItem = ({ cart, index }) => {
             </View>
         </View>
     );
-}
+})
 
 export default CartItem;

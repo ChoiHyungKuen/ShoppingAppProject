@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
-import { SafeAreaView ,View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert ,View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
@@ -17,7 +17,7 @@ const Register = ({ navigation }) => {
 
     useEffect(() => {
         if(onRegisterDone) {
-            alert('회원가입 되었습니다.');
+            Alert.alert('알림','회원가입 되었습니다.');
             navigation.replace('Login');
             dispatch(registerDone());
         }
@@ -25,7 +25,7 @@ const Register = ({ navigation }) => {
 
     const onRegister = useCallback(() => {
         if(password !== passwordCheck) {
-            alert('비밀번호와 비밀번호 확인이 맞지 않습니다.');
+            Alert.alert('알림','비밀번호와 비밀번호 확인이 맞지 않습니다.');
             return ;
         }
         dispatch(register({ email, password, name }));

@@ -2,7 +2,7 @@
 #
 .DS_Store
 
-# folders
+# front folders
 ios
 android
 __tests__
@@ -18,3 +18,5 @@ babel.config.js
 package-lock.json
 .buckconfig
 
+# back folders
+back/node_modules
