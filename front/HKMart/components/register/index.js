@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
 import { getWindowHeight } from '../common/CommonFunction';
 import ProductHeader from '../header/ProductHeader';
-import { register, registerDone } from '../../reducers/userSlice';
+import { register, registerSuccess } from '../../reducers/userSlice';
 const Register = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { onRegisterDone } = useSelector(state => state.user);
+    const { registerDone } = useSelector(state => state.user);
     const [email, onChangeEmail, setEmail] = userInput('');
     const [password, onChangePassword, setPassword] = userInput('');
     const [passwordCheck, onChangepasswordCheck, setPasswordCheck] = userInput('');
@@ -16,12 +16,12 @@ const Register = ({ navigation }) => {
     
 
     useEffect(() => {
-        if(onRegisterDone) {
+        if(registerDone) {
             Alert.alert('알림','회원가입 되었습니다.');
             navigation.replace('Login');
-            dispatch(registerDone());
+            dispatch(registerSuccess());
         }
-    }, [onRegisterDone]);
+    }, [registerDone]);
 
     const onRegister = useCallback(() => {
         if(password !== passwordCheck) {

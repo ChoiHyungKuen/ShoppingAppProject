@@ -2,13 +2,13 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { View, Text, SafeAreaView, Alert, TouchableOpacity, Animated, PanResponder} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCart, addCartDone } from '../../reducers/userSlice';
+import { addCart, addCartSuccess } from '../../reducers/userSlice';
 import { getWindowHeight } from '../common/CommonFunction';
 
 
 const PurchaseView = ( { style, navigation, product } ) => {
     const dispatch = useDispatch();
-    const { onAddCartDone } = useSelector(state => state.user);
+    const { addCartDone } = useSelector(state => state.user);
     const [showMenu, setShowMenu] = useState(false);
     const [qty, setQty] = useState(1);
     const [totalPrice, setTotalPrice] = useState(product.price);
@@ -56,11 +56,11 @@ const PurchaseView = ( { style, navigation, product } ) => {
     }, [qty])
 
     useEffect(() => {
-        if(onAddCartDone) {
+        if(addCartDone) {
             Alert.alert('알림', '상품이 카트에 추가되었습니다.');
-            dispatch(addCartDone());
+            dispatch(addCartSuccess());
         }
-    }, [onAddCartDone]);
+    }, [addCartDone]);
 
     renderPurchaseMenu = () => {
         if(showMenu) {

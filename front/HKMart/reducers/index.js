@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { mainSlice } from './mainSlice';
 import { productSlice } from './productSlice';
 import { userSlice } from './userSlice';
-  
+
 export const rootReducer = combineReducers({
     main: mainSlice.reducer,
     user: userSlice.reducer,

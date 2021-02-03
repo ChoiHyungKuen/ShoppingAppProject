@@ -1,21 +1,27 @@
-import React, { useState, useCallback } from 'react'
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react'
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
-import { logIn } from '../../reducers/userSlice';
-import { getWindowHeight } from '../common/CommonFunction';
+import { logIn, logInSuccess } from '../../reducers/userSlice';
 import ProductHeader from '../header/ProductHeader';
-import CryptoJS from 'react-native-crypto-js';
+
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
+    const { logInDone } = useSelector(state => state.user);
     const [email, onChangeEmail, setEmail] = userInput('');
     const [password, onChangePassword, setPassword] = userInput('');
 
+    useEffect(() => {
+        if(logInDone) {
+            Alert.alert('알림', '로그인 되었습니다.');
+            dispatch(logInSuccess);
+            navigation.goBack();
+        }
+    }, [logInDone]);
+
     const onClickLoginBtn = useCallback(() => {
-        let encPassword = CryptoJS.AES.encrypt(password, 'test').toString();
-        dispatch(logIn({ email, encPassword }));
-        navigation.goBack();
+        dispatch(logIn({ email, password }));
     }, [email, password]);
 
     const onClickRegisterBtn = useCallback(() => {

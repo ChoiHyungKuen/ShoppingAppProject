@@ -1,10 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { ServerURL } from '../Config';
+import CryptoJS from 'react-native-crypto-js';
+  
+axios.defaults.baseURL = ServerURL;
+
 const initialState = {
     myInfo: null,
     cart: [],
-    onRegisterDone: false,
-    onAddCartDone: false,
-    onRemoveCartDone: false
+    logInDone: false,
+    registerDone: false,
+    addCartDone: false,
+    removeCartDone: false
 }
 
 export const logIn = createAsyncThunk(
@@ -12,15 +19,13 @@ export const logIn = createAsyncThunk(
     async (data) => {
         try {
             // const response = await ...
-            return {
-                id: 1,
-                email: data.email,
-                name: 'TEST',
-                HKPoint: 1500,
-                couponCount: 4,
-                rank: 'Silver'
-            }
+            let encPassword = CryptoJS.AES.encrypt(data.password, 'test').toString();
+            console.log("TEST"+JSON.stringify(encPassword));
+            const response = await axios.post('user/logIn', { email: data.email, encPassword});
+            console.log("TEST2", response)
+            return response.data;
         } catch(err) {
+            alert(err.message);
             return err;
         }
     }
@@ -101,16 +106,17 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        registerDone(state) {
-            state.onRegisterDone = false;
+        logInSuccess(state) {
+            state.logInDone = false;
         },
-        addCartDone(state) {
-
-            state.onAddCartDone = false;
+        registerSuccess(state) {
+            state.registerDone = false;
         },
-        removeCartDone(state) {
-
-            state.onRemoveCartDone = false;
+        addCartSuccess(state) {
+            state.addCartDone = false;
+        },
+        removeCartSuccess(state) {
+            state.removeCartDone = false;
         },
         toggleCheckCartItem(state, action) {
             let data = state.cart.find((item) => item.id === action.payload.id);
@@ -124,21 +130,22 @@ export const userSlice = createSlice({
         [logIn.fulfilled]: (state, action) => {
             // Add user to the state array
             state.myInfo = action.payload;
+            state.logInDone = true;
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
             action.payload.checked = false;
             state.cart.push(action.payload);
-            state.onAddCartDone = true;
+            state.addCartDone = true;
         },
         [register.fulfilled]: (state, action) => {
             // Add user to the state array
-            state.onRegisterDone = action.payload;
+            state.registerDone = action.payload;
         },
         [removeCart.fulfilled]: (state, action) => {
             // Add user to the state array
             state.cart = state.cart.filter((item) => item.id !== action.payload);
-            state.onRemoveCartDone = true;
+            state.removeCartDone = true;
         },
         [changeCartQty.fulfilled]: (state, action) => {
             // Add user to the state array
@@ -162,4 +169,4 @@ export const userSlice = createSlice({
 
 });
 
-export const { registerDone, addCartDone, removeCartDone, toggleCheckCartItem, toggleAllCheckCartItem } = userSlice.actions;
+export const { registerSuccess, addCartSuccess, removeCartSuccess, logInSuccess, toggleCheckCartItem, toggleAllCheckCartItem } = userSlice.actions;
