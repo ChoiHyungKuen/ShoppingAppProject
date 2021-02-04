@@ -21,7 +21,7 @@ const ProductItem = ({ product, navigation }) => {
                 </View>
                 <View style={{ flex: .4, backgroundColor:'white', paddingLeft: 10}}>
                     <View style={{ flex: .5, justifyContent: 'center' }}>
-                        <Text>{product.title}</Text>
+                        <Text>{product.name}</Text>
                     </View>
                     <View style={{ flex: .5, justifyContent: 'center' }}>
                         <Text>${product.price}</Text>
