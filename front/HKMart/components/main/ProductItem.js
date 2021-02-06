@@ -14,7 +14,7 @@ const ProductItem = ({ product, navigation }) => {
                     <Image
                         style={{ width: '90%',height:'90%'}}
                         source={{
-                            uri: product.image,
+                            uri: product.mainImageSrc,
                         }}
                         resizeMode="contain"
                     />
@@ -24,7 +24,7 @@ const ProductItem = ({ product, navigation }) => {
                         <Text>{product.name}</Text>
                     </View>
                     <View style={{ flex: .5, justifyContent: 'center' }}>
-                        <Text>${product.price}</Text>
+                        <Text>{product.price}원</Text>
                     </View>
                 </View>
             </TouchableOpacity>

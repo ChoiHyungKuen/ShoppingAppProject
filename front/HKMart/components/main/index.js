@@ -12,7 +12,6 @@ const Main = ({ navigation }) => {
     const dispatch = useDispatch();
     const { adImagePath, eventImagePath, mainProducts } =  useSelector(state => state.main);
 
-    
     useEffect(() => {
         dispatch(loadMainProducts());
         dispatch(loadADImage());
@@ -39,7 +38,7 @@ const Main = ({ navigation }) => {
                 />
             </View>
             {
-                mainProducts && mainProducts.map(product => (<ProductItem key={product.id} product={product} navigation={navigation}/>))
+                mainProducts && mainProducts.length > 0 && mainProducts.map(product => (<ProductItem key={product.id} product={product} navigation={navigation}/>))
             }
         </ScrollView>
     );

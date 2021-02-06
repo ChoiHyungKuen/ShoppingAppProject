@@ -24,7 +24,7 @@ const ProductDetail = ({ route, navigation }) => {
                             <Image
                                 style={{ width: '100%',height:'90%'}}
                                 source={{
-                                    uri: product.image,
+                                    uri: product.mainImageSrc,
                                 }}
                                 resizeMode="contain"
                             />
@@ -32,10 +32,10 @@ const ProductDetail = ({ route, navigation }) => {
 
                         <View style={{ height: getWindowHeight(10), backgroundColor: '#ffffff', paddingLeft: 10 }}>
                             <View style={{ flex: .6, justifyContent: 'center' }}> 
-                                <Text>{product.title}</Text>
+                                <Text>{product.name}</Text>
                             </View>
                             <View style={{ flex: .4 }}>
-                                <Text>${product.price}</Text>
+                                <Text>{product.price}원</Text>
                             </View>
                         </View>
                         <View style={{ height: getWindowHeight(0.5) }}/>
