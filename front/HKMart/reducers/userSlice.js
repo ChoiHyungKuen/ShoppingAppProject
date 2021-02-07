@@ -37,9 +37,13 @@ export const register = createAsyncThunk(
     async (data) => {
         try {
             // const response = await ...
-            console.log(data);
-            return true;
+            let encPassword = CryptoJS.AES.encrypt(data.password, 'test').toString();
+            console.log("TEST"+JSON.stringify(encPassword));
+            const response = await axios.post('user/register', { ...data, encPassword});
+            console.log("TEST2", response)
+            return response.data;
         } catch(err) {
+            alert(err.message);
             return err;
         }
     }
@@ -140,7 +144,10 @@ export const userSlice = createSlice({
         },
         [register.fulfilled]: (state, action) => {
             // Add user to the state array
-            state.registerDone = action.payload;
+            if(action.payload.registerSuccess === true) {
+                state.registerDone = action.payload;
+            } 
+            
         },
         [removeCart.fulfilled]: (state, action) => {
             // Add user to the state array

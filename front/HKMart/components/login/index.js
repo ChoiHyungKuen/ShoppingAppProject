@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
 import { logIn, logInSuccess } from '../../reducers/userSlice';
 import ProductHeader from '../header/ProductHeader';
+import CommonHeader from '../header/CommonHeader';
 
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Login = ({ navigation }) => {
     }, []);
     return (
         <View style={{ flex: 1, backgroundColor: '#ffffff'}} >
-            <ProductHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation} />
+            <CommonHeader title={'로그인'} navigation={navigation}/>
             <View style={{ flex: .2, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={{ width: '90%', height: '35%' }}>
                     <TextInput 

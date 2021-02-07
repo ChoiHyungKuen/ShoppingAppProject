@@ -17,6 +17,9 @@ node_modules
 babel.config.js
 package-lock.json
 .buckconfig
+Config.js
+
 
 # back folders
 back/node_modules
+config
