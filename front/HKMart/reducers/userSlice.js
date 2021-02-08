@@ -20,13 +20,14 @@ export const logIn = createAsyncThunk(
         try {
             // const response = await ...
             let encPassword = CryptoJS.AES.encrypt(data.password, 'test').toString();
-            console.log("TEST"+JSON.stringify(encPassword));
-            const response = await axios.post('user/logIn', { email: data.email, encPassword});
-            console.log("TEST2", response)
+            const response = await axios.post('user/logIn', { userID: data.userID, password: encPassword});
+            console.log("TEST ", response)
+            
+            
+            alert(JSON.stringify(response))
             return response.data;
         } catch(err) {
-            alert(err.message);
-            return err;
+            alert(err.response.message);
         }
     }
 );
@@ -134,7 +135,7 @@ export const userSlice = createSlice({
         [logIn.fulfilled]: (state, action) => {
             // Add user to the state array
             state.myInfo = action.payload;
-            state.logInDone = true;
+            // state.logInDone = true;
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array

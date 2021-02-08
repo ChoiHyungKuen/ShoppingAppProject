@@ -4,16 +4,48 @@ const CryptoJS = require('crypto-js');
 const { User } = require('../models');
 
 
-router.post('/logIn', (req, res, next) => {
+router.post('/logIn', async (req, res, next) => {
     // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
-    res.status(200).json({
-        id: 1,
-        email: req.body.email,
-        name: 'TEST',
-        HKPoint: 1500,
-        couponCount: 4,
-        rank: 'Silver'
-    });
+    try {
+        
+        const user = await User.findOne({
+            where: { userID: req.body.userID}
+        });
+    
+        if(!user) {
+    
+            return res.status(403).send('존재하지 않는 ID입니다. 다시 확인해주세요.');
+        }
+    
+        if(user.password !== req.body.password) {
+    
+            return res.status(403).send('비밀번호가 틀렸습니다.');
+        }
+
+        const fullUserWithoutPassword = await User.findOne({
+            where: { id: user.id },
+            attributes: {
+                exclude: ['password']
+            },
+            // include: [{
+            //     model: Post
+            // }, {
+            //     model: User,
+            //     as: 'Followings'
+            // }, {
+            //     model: User,
+            //     as: 'Followers'
+            // }]
+            
+        });
+        // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
+        console.log(fullUserWithoutPassword)
+        res.status(200).json(fullUserWithoutPassword);
+    } catch(error) {
+        console.log(error);
+        next(error);
+    }
+    
 });
 
 

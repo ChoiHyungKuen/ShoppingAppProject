@@ -10,7 +10,7 @@ import CommonHeader from '../header/CommonHeader';
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { logInDone } = useSelector(state => state.user);
-    const [email, onChangeEmail, setEmail] = userInput('');
+    const [userID, onChangeUserID, setUserID] = userInput('');
     const [password, onChangePassword, setPassword] = userInput('');
 
     useEffect(() => {
@@ -22,8 +22,8 @@ const Login = ({ navigation }) => {
     }, [logInDone]);
 
     const onClickLoginBtn = useCallback(() => {
-        dispatch(logIn({ email, password }));
-    }, [email, password]);
+        dispatch(logIn({ userID, password }));
+    }, [userID, password]);
 
     const onClickRegisterBtn = useCallback(() => {
         navigation.navigate('Register');
@@ -35,7 +35,8 @@ const Login = ({ navigation }) => {
                 <View style={{ width: '90%', height: '35%' }}>
                     <TextInput 
                         style={{ height: '80%', borderWidth: 1, paddingLeft: 5 }}
-                        onChangeText={onChangeEmail}
+                        onChangeText={onChangeUserID}
+                        value={userID}
                         autoCapitalize='none'
                         placeholder='아이디를 입력해주세요.'/>
                 </View>
@@ -43,6 +44,7 @@ const Login = ({ navigation }) => {
                 <TextInput style={{ height: '80%', borderWidth: 1}}
                         style={{ height: '80%', borderWidth: 1, paddingLeft: 5 }}
                         autoCapitalize='none'
+                        value={password}
                         secureTextEntry={true}
                         onChangeText={onChangePassword}
                         placeholder='비밀번호를 입력해주세요.'/>
