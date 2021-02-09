@@ -8,7 +8,7 @@ import { getWindowHeight } from '../common/CommonFunction';
 
 const PurchaseView = ( { style, navigation, product } ) => {
     const dispatch = useDispatch();
-    const { addCartDone } = useSelector(state => state.user);
+    const { addCartDone, myInfo } = useSelector(state => state.user);
     const [showMenu, setShowMenu] = useState(false);
     const [qty, setQty] = useState(1);
     const [totalPrice, setTotalPrice] = useState(product.price);
@@ -46,8 +46,8 @@ const PurchaseView = ( { style, navigation, product } ) => {
     }, [qty]);
 
     const onAddCart = useCallback(() => {
-        let purchaseInfo = { ...product, qty};
-        dispatch(addCart(purchaseInfo));
+        // let purchaseInfo = { ...product, qty};
+        dispatch(addCart({ productId: product.id, userId: myInfo.id, qty }));
     }, [qty, totalPrice, product]);
 
 

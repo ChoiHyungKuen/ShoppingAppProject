@@ -7,7 +7,7 @@ axios.defaults.baseURL = ServerURL;
 const initialState = {
     mainProducts: [],
     eventImagePath: [],
-    adImagePath: '',
+    adImagePath: null,
 }
 
 export const loadEventImages = createAsyncThunk(

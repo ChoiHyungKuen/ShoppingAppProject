@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     //관계를 테이블로 정의해서 자신에서의 관계를 구별해줄 수 있는거같음  (다대다 관계로만 되나봄)
     Product.associate = (db) => {
-        db.Product.belongsToMany(db.Cart, { through: 'ProductCart', foreignKey: 'ProductCartId' });  // 팔로워를 찾으려면 내가 팔로우중인 사람을 갖고 검색하고
+        db.Product.belongsToMany(db.Cart, { through: 'ProductCart', foreignKey: 'productId' });  // 팔로워를 찾으려면 내가 팔로우중인 사람을 갖고 검색하고
         db.Product.hasMany(db.ProductImage);
         // db.User.hasMany(db.Post);
         // db.User.hasMany(db.Comment);

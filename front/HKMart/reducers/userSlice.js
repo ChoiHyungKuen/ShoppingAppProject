@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ServerURL } from '../Config';
 import CryptoJS from 'react-native-crypto-js';
+import { Alert } from 'react-native';
   
 axios.defaults.baseURL = ServerURL;
 
@@ -22,12 +23,11 @@ export const logIn = createAsyncThunk(
             let encPassword = CryptoJS.AES.encrypt(data.password, 'test').toString();
             const response = await axios.post('user/logIn', { userID: data.userID, password: encPassword});
             console.log("TEST ", response)
+            alert(JSON.stringify(response.data))
             
-            
-            alert(JSON.stringify(response))
             return response.data;
         } catch(err) {
-            alert(err.response.message);
+            Alert.alert('오류', err.response.data);
         }
     }
 );
@@ -44,8 +44,7 @@ export const register = createAsyncThunk(
             console.log("TEST2", response)
             return response.data;
         } catch(err) {
-            alert(err.message);
-            return err;
+            Alert.alert('오류', err.response.data);
         }
     }
 );
@@ -68,9 +67,10 @@ export const addCart = createAsyncThunk(
     'user/addCart',
     async (data) => {
         try {
-            // const response = await ...
-            console.log('카트 ', data)
-            return data;
+            const response = await axios.post('user/addCart', data);
+            alert(JSON.stringify(response.data))
+            
+            return response.data;
         } catch(err) {
             return err;
         }
@@ -134,13 +134,15 @@ export const userSlice = createSlice({
     extraReducers: {
         [logIn.fulfilled]: (state, action) => {
             // Add user to the state array
-            state.myInfo = action.payload;
-            // state.logInDone = true;
+            state.myInfo = action.payload.myInfo;
+            state.cart = action.payload.cart;
+            state.logInDone = true;
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
-            action.payload.checked = false;
-            state.cart.push(action.payload);
+            let item = action.payload
+            item.checked = false;
+            state.cart.push(item);
             state.addCartDone = true;
         },
         [register.fulfilled]: (state, action) => {
