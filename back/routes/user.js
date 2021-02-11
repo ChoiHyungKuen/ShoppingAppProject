@@ -13,6 +13,7 @@ router.post('/logIn', async (req, res, next) => {
             where: { userID: req.body.userID },
             include: {
                 model: Cart
+
             }
         });
     
@@ -42,7 +43,7 @@ router.post('/logIn', async (req, res, next) => {
         });
 
         // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
-        res.status(200).json({ myInfo: fullUserWithoutPassword, cart: cartProducts});
+        res.status(200).json({ myInfo: fullUserWithoutPassword, cart: []});
     } catch(error) {
         console.log(error);
         next(error);
@@ -82,19 +83,28 @@ router.post('/register', async (req, res, next) => {
 router.post('/addCart', async (req, res, next) => {
     // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
     try {
-
-        const cart = await Cart.create({
-            qty: req.body.qty,
-            UserId: req.body.userId,
+        const [cart, created] = await Cart.findOrCreate({
+            where: { UserId: req.body.userId },
+            defaults: { qty: req.body.qty }
         });
+        // if(cart)
+        //     await Cart.create({
+        //         qty: req.body.qty,
+        //         UserId: req.body.userId,
+        // });
 
+        
         await cart.addProducts(req.body.productId);
 
-        if(!cart) {
-            res.status(500).send('서버 에러 발생!! 잠시 후 다시 시도해주세요.');
-            return ;
-        }
-        let cartProducts =  await cart.getProducts();
+        // if(!cart) {
+        //     res.status(500).send('서버 에러 발생!! 잠시 후 다시 시도해주세요.');
+        //     return ;
+        // }
+
+        let findCart = await Cart.findOne({
+            where: { UserId: req.body.userId }
+        });
+        let cartProducts =  await findCart.getProducts();
         // const fullCartInfo = await Product.findOne({
         //     where: { cartId: cart.id },
         //     attributes: {
@@ -112,7 +122,8 @@ router.post('/addCart', async (req, res, next) => {
             
         // });
         // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
-        res.status(200).json(cartProducts);
+        console.log(cartProducts);
+        res.status(200).json(cartProducts.data);
     } catch(error) {
         console.log(error);
         next(error);

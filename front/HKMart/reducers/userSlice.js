@@ -68,7 +68,6 @@ export const addCart = createAsyncThunk(
     async (data) => {
         try {
             const response = await axios.post('user/addCart', data);
-            alert(JSON.stringify(response.data))
             
             return response.data;
         } catch(err) {
@@ -140,9 +139,11 @@ export const userSlice = createSlice({
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
-            let item = action.payload
-            item.checked = false;
-            state.cart.push(item);
+            state.cart = action.payload.map(item => {
+                item.checked = false;
+                return item;
+            })
+            alert(JSON.stringify(state.cart ));
             state.addCartDone = true;
         },
         [register.fulfilled]: (state, action) => {
