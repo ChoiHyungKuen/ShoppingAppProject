@@ -69,13 +69,13 @@ const CartItem = memo(({ cart, index, navigation }) => {
                     value={cart.checked}
                     boxType='square'
                     onValueChange={onToggleCheckBox}/>
-                <TouchableOpacity onPress={onGoProductDetail}><Text style={{ left: 10 }}>{cart.title}</Text></TouchableOpacity>
+                <TouchableOpacity onPress={onGoProductDetail}><Text style={{ left: 10 }}>{cart.name}</Text></TouchableOpacity>
             </View>
             <View style={{ height: '75%', flexDirection: 'row', justifyContent: 'center' }}>
                 <Image
                     style={{ width: '30%',height: '90%'}}
                     source={{
-                        uri: cart.image,
+                        uri: cart.mainImageSrc,
                     }}
                     resizeMode="contain"
                 />

@@ -139,11 +139,8 @@ export const userSlice = createSlice({
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
-            state.cart = action.payload.map(item => {
-                item.checked = false;
-                return item;
-            })
-            alert(JSON.stringify(state.cart ));
+            alert(JSON.stringify(action.payload));
+            state.cart = action.payload
             state.addCartDone = true;
         },
         [register.fulfilled]: (state, action) => {

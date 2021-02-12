@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     User.associate = (db) => {
         db.User.hasMany(db.Cart);
         // db.User.hasMany(db.Product);
-        // db.User.belongsToMany(db.Post, { through: 'Cart' });
+        db.User.belongsToMany(db.Product, { through: db.Cart });
         // 아래 두 경우 반대의경우? 좀 헷갈리니 나중에 한번더 보고 정리해주는게 좋을듯
         // userId 가 각각 두개로 동일하니 구별이 필요하고 그 역할을 foreignKey 로 구별해주게 해준다.
         // db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'FollowingId' });  // 팔로워를 찾으려면 내가 팔로우중인 사람을 갖고 검색하고

@@ -8,7 +8,7 @@ import { getWindowHeight } from '../common/CommonFunction';
 
 const PurchaseView = ( { style, navigation, product } ) => {
     const dispatch = useDispatch();
-    const { addCartDone, myInfo } = useSelector(state => state.user);
+    const { addCartDone, myInfo,cart } = useSelector(state => state.user);
     const [showMenu, setShowMenu] = useState(false);
     const [qty, setQty] = useState(1);
     const [totalPrice, setTotalPrice] = useState(product.price);
@@ -47,6 +47,11 @@ const PurchaseView = ( { style, navigation, product } ) => {
 
     const onAddCart = useCallback(() => {
         // let purchaseInfo = { ...product, qty};
+        let productInCart = cart.filter(item => item.id === product.id);
+        if(productInCart.length > 0) {
+            Alert.alert('알림', '이미 카트에 넣은 제품입니다.');
+            return ;
+        } 
         dispatch(addCart({ productId: product.id, userId: myInfo.id, qty }));
     }, [qty, totalPrice, product]);
 
