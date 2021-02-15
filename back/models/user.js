@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     });
     //관계를 테이블로 정의해서 자신에서의 관계를 구별해줄 수 있는거같음  (다대다 관계로만 되나봄)
     User.associate = (db) => {
-        db.User.hasMany(db.Cart);
         // db.User.hasMany(db.Product);
         db.User.belongsToMany(db.Product, { through: db.Cart });
         // 아래 두 경우 반대의경우? 좀 헷갈리니 나중에 한번더 보고 정리해주는게 좋을듯

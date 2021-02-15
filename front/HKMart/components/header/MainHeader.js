@@ -8,11 +8,15 @@ import { searchProducts, searchDone } from '../../reducers/productSlice';
 const MainHeader = ( { style, navigation, currentScreenName } ) => {
     const dispatch = useDispatch();
     const [searchText, onChangeSearchText, setSearchText] = userInput('');
-    const { cart } = useSelector(state => state.user);
+    const { cart, myInfo } = useSelector(state => state.user);
     const { onSearchDone } = useSelector(state => state.product);
     const onClickCartBtn = useCallback(() => {
-        navigation.navigate('Cart');
-    }, []);
+        if(myInfo) {
+            navigation.navigate('Cart');
+        } else { 
+            navigation.navigate('Login');
+        }
+    }, [myInfo]);
     const onSearch = useCallback(() => {
         dispatch(searchProducts(searchText));
     }, [searchText]);

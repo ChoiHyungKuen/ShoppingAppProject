@@ -11,10 +11,6 @@ router.post('/logIn', async (req, res, next) => {
         
         const user = await User.findOne({
             where: { userID: req.body.userID },
-            include: {
-                model: Cart
-
-            }
         });
     
         if(!user) {
@@ -97,9 +93,11 @@ router.post('/addCart', async (req, res, next) => {
         })
 
         await user.addProduct(product, { through: { qty: req.body.qty } });
+
         const result = await User.findAll({
             where: { id: req.body.userId},
-            include: [{ model: Cart }, {model: Product}],
+            include: [{model: Product}],
+            exclude: [{model: User}]
         })
 
         // const r = await user.findAll({
@@ -110,14 +108,16 @@ router.post('/addCart', async (req, res, next) => {
         //       }
         //     }
         //   });
-
+        //   console.log(result)
           
-        const cartList = await user.getProducts({ joinTableAttributes: ['qty'] });
+        // const cartList = await user.getProducts({ joinTableAttributes: ['qty'] });
+        const cartList = result[0].Products;
 
+        console.log("@?",result)
         const converCart = [];
 
         cartList.map(cart => {
-            converCart.push({ id: cart.id, name: cart.name, stock: cart.stock, price: cart.price, description: cart.description, mainImageSrc: cart.mainImageSrc, qty: cart.Cart.qty})        
+            converCart.push({ id: cart.id, name: cart.name, stock: cart.stock, price: cart.price, description: cart.description, mainImageSrc: cart.mainImageSrc, cartId: cart.Cart.id, qty: cart.Cart.qty})        
         })
         // let cart = await Cart.findAll({
         //     where: { UserId: req.body.userId },
@@ -149,7 +149,7 @@ router.post('/addCart', async (req, res, next) => {
             
         // });
         // console.log(CryptoJS.AES.decrypt(req.body.encPassword, 'test').toString(CryptoJS.enc.Utf8));
-        console.log(converCart );
+        // console.log(converCart );
         res.status(200).json(converCart );
     } catch(error) {
         console.log(error);

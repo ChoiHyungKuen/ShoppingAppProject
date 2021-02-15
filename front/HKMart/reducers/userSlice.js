@@ -23,7 +23,6 @@ export const logIn = createAsyncThunk(
             let encPassword = CryptoJS.AES.encrypt(data.password, 'test').toString();
             const response = await axios.post('user/logIn', { userID: data.userID, password: encPassword});
             console.log("TEST ", response)
-            alert(JSON.stringify(response.data))
             
             return response.data;
         } catch(err) {
