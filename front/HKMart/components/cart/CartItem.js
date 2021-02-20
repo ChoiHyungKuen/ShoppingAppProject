@@ -11,9 +11,9 @@ const CartItem = memo(({ cart, index, navigation }) => {
 
     // cartCheckedBox 로 따로 나눠서 관리해볼까?? 이미지 깜빡임 없애고 싶음
     const dispatch = useDispatch();
+    const { myInfo } =  useSelector(state => state.user);
     const [showPicker, setShowPicker] = useState(cart.qty < 10);  // 한번더 갱신됨 머가문제인지 모름..
     const [qtyState, setQtyState] = useState(String(cart.qty));
-
     const [qtyList, setQtyList] = useState([
         {label: '1', value: 1},
         {label: '2', value: 2},
@@ -26,7 +26,6 @@ const CartItem = memo(({ cart, index, navigation }) => {
         {label: '9', value: 9},
         {label: '10+', value: 10},
     ]);
-
     const onChangeQtyState = useCallback((value) => {
         if(parseInt(value) > 10) {
             Alert.alert('경고', '수량이 10보다 클 수는 없습니다.');
@@ -41,9 +40,10 @@ const CartItem = memo(({ cart, index, navigation }) => {
         setShowPicker(true);
     }, []);
 
-    const onClickRemoveBtn = useCallback((id) => () => {
-        dispatch(removeCart(id));
-    }, []);
+    const onClickRemoveBtn = useCallback(() => {
+        dispatch(removeCart({ userId: myInfo.id, cartId: cart.cartId}));
+        
+    }, [cart]);
 
     const onChanePickerValue = useCallback((id) => (itemValue) => {
         if(itemValue >= 10) {
@@ -54,7 +54,8 @@ const CartItem = memo(({ cart, index, navigation }) => {
     }, [showPicker, cart.qty])
 
     const onToggleCheckBox = useCallback((checked) => {
-        dispatch(toggleCheckCartItem({ id: cart.id, checked }))
+        alert(JSON.stringify(cart))
+        dispatch(toggleCheckCartItem({ cartId: cart.cartId, checked }))
     }, [cart.checked]); 
 
     const onGoProductDetail = useCallback(() => {
@@ -87,7 +88,7 @@ const CartItem = memo(({ cart, index, navigation }) => {
                     <View style={{ width: '90%', height: '35%'}}>
                         <TouchableOpacity 
                             style={{ width: '40%', height: '80%', borderWidth: 1, justifyContent: 'center', alignItems: 'center' }}
-                            onPress={onClickRemoveBtn(cart.id)}>
+                            onPress={onClickRemoveBtn}>
                             <Text>삭제</Text>
                         </TouchableOpacity>
                     </View>

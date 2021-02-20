@@ -80,10 +80,10 @@ export const removeCart = createAsyncThunk(
     'user/removeCart',
     async (data) => {
         try {
-            // const response = await ...
             console.log('카트 ', data)
-            //나중에는 삭제된 데이터의 id가 옴
-            return data;
+            const response = await axios.post('user/removeCart', data);
+            
+            return response.data;
         } catch(err) {
             return err;
         }
@@ -94,10 +94,9 @@ export const removeSelectedCartItem = createAsyncThunk(
     'user/removeSelectedCartItem',
     async (data) => {
         try {
-            // const response = await ...
-            console.log('카트 ', data)
-            //나중에는 삭제된 데이터의 id가 옴
-            return { 'state': 'success'};
+            const response = await axios.post('user/removeSelectedCartItem', data);
+            
+            return response.data;
         } catch(err) {
             return err;
         }
@@ -122,7 +121,7 @@ export const userSlice = createSlice({
             state.removeCartDone = false;
         },
         toggleCheckCartItem(state, action) {
-            let data = state.cart.find((item) => item.id === action.payload.id);
+            let data = state.cart.find((item) => item.cartId === action.payload.cartId);
             data.checked = action.payload.checked;
         },
         toggleAllCheckCartItem(state, action) {
@@ -134,12 +133,12 @@ export const userSlice = createSlice({
             // Add user to the state array
             state.myInfo = action.payload.myInfo;
             state.cart = action.payload.cart;
+            alert(JSON.stringify(action.payload.cart))
             state.logInDone = true;
         },
         [addCart.fulfilled]: (state, action) => {
             // Add user to the state array
-            alert(JSON.stringify(action.payload));
-            state.cart = action.payload
+            state.cart = action.payload;
             state.addCartDone = true;
         },
         [register.fulfilled]: (state, action) => {
@@ -151,7 +150,8 @@ export const userSlice = createSlice({
         },
         [removeCart.fulfilled]: (state, action) => {
             // Add user to the state array
-            state.cart = state.cart.filter((item) => item.id !== action.payload);
+            state.cart = state.cart.filter((item) => item.cartId !== action.payload.cartId);
+            
             state.removeCartDone = true;
         },
         [changeCartQty.fulfilled]: (state, action) => {
@@ -169,7 +169,10 @@ export const userSlice = createSlice({
             data.qty = qty;
         },
         [removeSelectedCartItem.fulfilled]: (state, action) => {
+            alert(JSON.stringify(action.payload));
+            return;
             state.cart = state.cart.filter(item => !item.checked);
+
             state.onRemoveCartDone = true;
         }
     }

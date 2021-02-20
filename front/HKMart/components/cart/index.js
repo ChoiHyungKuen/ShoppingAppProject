@@ -37,11 +37,17 @@ const Cart = ({ navigation }) => {
 
 
     const onClickSelectedItemRemoveBtn = useCallback(() => {
-        let checkedCnt = cart.filter(item => item.checked).length;
-        if(checkedCnt == 0) {
+        let checkedCart = [];
+        alert(JSON.stringify(cart))
+        return ;
+        cart.map(item => {
+            if(item.checked)
+                checkedCart.push(item.cartId);
+        });
+        if(checkedCart.length == 0) {
             Alert.alert('경고', '1개 이상의 상품을 선택해주세요.');
         } else {
-            dispatch(removeSelectedCartItem());
+            dispatch(removeSelectedCartItem({ checkedCart }));
         }
     }, []);
 
