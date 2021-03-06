@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import userInput from '../../hooks/userInput';
 import { searchProducts, searchDone } from '../../reducers/productSlice';
 
-const MainHeader = ( { style, navigation, currentScreenName } ) => {
+const MainHeader = ( { style, navigation, currentScreenName, route } ) => {
     const dispatch = useDispatch();
     const [searchText, onChangeSearchText, setSearchText] = userInput('');
     const { cart, myInfo } = useSelector(state => state.user);
@@ -18,7 +18,7 @@ const MainHeader = ( { style, navigation, currentScreenName } ) => {
         }
     }, [myInfo]);
     const onSearch = useCallback(() => {
-        dispatch(searchProducts(searchText));
+        dispatch(searchProducts({searchText}));
     }, [searchText]);
    
     const onClickBackBtn = useCallback(() => {
@@ -28,8 +28,11 @@ const MainHeader = ( { style, navigation, currentScreenName } ) => {
     useEffect(() => {
         if(onSearchDone) {
             dispatch(searchDone());
-            navigation.navigate('Search');
+            navigation.navigate('Search', { searchText });
         }
+        if(route.params) {
+            setSearchText(route.params.searchText);
+        } 
     }, [onSearchDone])
     return (
         <SafeAreaView style={[{flex: .06, flexDirection: 'row', backgroundColor: '#ffffff'}, style]}>

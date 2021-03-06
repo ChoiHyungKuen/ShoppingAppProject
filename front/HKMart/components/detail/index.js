@@ -56,7 +56,7 @@ const ProductDetail = ({ route, navigation }) => {
                             <Text>{product.description}</Text>
                         </View>
                     </ScrollView>
-                    <PurchaseView product={product}/>
+                    <PurchaseView product={product} navigation={navigation}/>
                 </>
             }
             

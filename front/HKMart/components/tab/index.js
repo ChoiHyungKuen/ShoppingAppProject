@@ -14,10 +14,10 @@ import Search from '../search';
 
 const Tab = createMaterialTopTabNavigator();
 
-const BottomTab = ({ navigation }) => {
+const BottomTab = ({ navigation, route }) => {
     return (
         <>
-            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation} currentScreenName='Main'/>
+            <MainHeader style={{ flex: .06, flexDirection: 'row', backgroundColor: '#ffffff' }} navigation={navigation} route={route} currentScreenName='Main' />
             <Tab.Navigator
                 style={{ flex: .94 }}
                 tabBarOptions={{ 
@@ -45,7 +45,7 @@ const BottomTab = ({ navigation }) => {
                             useEffect(() => {
                                 const unsubscribe = navigation.addListener('tabPress', e => {
                                     e.preventDefault();
-                                    const pushAction =StackActions.push('Search');
+                                    const pushAction = StackActions.push('Search', { type: 'tab' });
                                     navigation.dispatch(pushAction);
                                     // navigation.navigate('Search')
                                   });

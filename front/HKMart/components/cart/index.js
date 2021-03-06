@@ -38,8 +38,6 @@ const Cart = ({ navigation }) => {
 
     const onClickSelectedItemRemoveBtn = useCallback(() => {
         let checkedCart = [];
-        alert(JSON.stringify(cart))
-        return ;
         cart.map(item => {
             if(item.checked)
                 checkedCart.push(item.cartId);
@@ -49,7 +47,7 @@ const Cart = ({ navigation }) => {
         } else {
             dispatch(removeSelectedCartItem({ checkedCart }));
         }
-    }, []);
+    }, [cart]);
 
     const renderList = ({item, index}) => (
         <CartItem cart={item} index={index} navigation={navigation}/>
@@ -103,7 +101,7 @@ const Cart = ({ navigation }) => {
                         </View>
                         <View style={{ width: '30%' }}>
                             
-                        <Text>${totalPrice}</Text>
+                        <Text>{totalPrice}원</Text>
                         </View>
                     </View>
                     <View style={{ height: '50%', flexDirection: 'row', alignItems: 'center' }}>

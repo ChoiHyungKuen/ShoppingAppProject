@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const CryptoJS = require('crypto-js');
 const { User, Cart, Product } = require('../models');
-const cart = require('../models/cart');
 
 
 router.post('/logIn', async (req, res, next) => {
@@ -186,6 +185,27 @@ router.post('/removeCart', async (req, res, next) => {
 });
 
 
+
+router.post('/changeCartQty', async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const result = await Cart.update(
+            { qty: req.body.qty },
+            { where: { id: req.body.cartId } }
+        );
+        
+        if(!result) {
+            res.status(500).send('서버 에러 발생!! 잠시 후 다시 시도해주세요.');
+            return ;
+        }
+        // await user.removeProduct({ through: { id: req.body.cartId } });
+
+        res.json(req.body);
+    } catch(error) {
+        next(error);
+    }
+
+});
 router.post('/removeSelectedCartItem', async (req, res, next) => {
     try {
         console.log(req.body)
@@ -196,7 +216,7 @@ router.post('/removeSelectedCartItem', async (req, res, next) => {
         console.log(cart);
         // await user.removeProduct({ through: { id: req.body.cartId } });
 
-        res.json({ checkedCart });
+        res.json({ checkedCart: req.body.checkedCart  });
     } catch(error) {
         next(error);
     }

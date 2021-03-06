@@ -45,12 +45,12 @@ const CartItem = memo(({ cart, index, navigation }) => {
         
     }, [cart]);
 
-    const onChanePickerValue = useCallback((id) => (itemValue) => {
+    const onChanePickerValue = useCallback((cartId) => (itemValue) => {
         if(itemValue >= 10) {
             setShowPicker(false);
             setQtyState(String(itemValue));
         }
-        dispatch(changeCartQty({ id, qty: itemValue}));
+        dispatch(changeCartQty({ cartId, qty: itemValue}));
     }, [showPicker, cart.qty])
 
     const onToggleCheckBox = useCallback((checked) => {
@@ -82,7 +82,7 @@ const CartItem = memo(({ cart, index, navigation }) => {
                 />
                 <View style={{ width: '60%', height: '90%', justifyContent: 'center', alignItems: 'center', paddingLeft: 20 }}>
                     <View style={{ width: '90%', height: '30%' }}>
-                        <Text style={{ fontSize: 15 }}>${cart.price * cart.qty}</Text>
+                        <Text style={{ fontSize: 15 }}>{cart.price * cart.qty}원</Text>
                     </View>
 
                     <View style={{ width: '90%', height: '35%'}}>
@@ -103,7 +103,7 @@ const CartItem = memo(({ cart, index, navigation }) => {
                                 value={cart.qty}
                                 modalStyle
                                 items={qtyList}
-                                onValueChange={onChanePickerValue(cart.id)}/>
+                                onValueChange={onChanePickerValue(cart.cartId)}/>
                             :
                             <>
                                 <TextInput 

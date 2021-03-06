@@ -47,13 +47,18 @@ const PurchaseView = ( { style, navigation, product } ) => {
 
     const onAddCart = useCallback(() => {
         // let purchaseInfo = { ...product, qty};
+        if(!myInfo) {
+            navigation.navigate('Login');
+            return ;
+        }
+
         let productInCart = cart.filter(item => item.id === product.id);
         if(productInCart.length > 0) {
             Alert.alert('알림', '이미 카트에 넣은 제품입니다.');
             return ;
         } 
         dispatch(addCart({ productId: product.id, userId: myInfo.id, qty }));
-    }, [qty, totalPrice, product]);
+    }, [qty, totalPrice, product, , cart]);
 
 
     useEffect(() => {

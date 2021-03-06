@@ -19,6 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/user', userRouter);
 app.use('/main', mainRouter);
 app.use('/product', productRouter);
+app.get('/getTest',(req, res)=> {
+
+    res.sendFile(__dirname+ '/test.html');
+});
+
 
 app.listen(3065, () => {
     console.log('서버 실행중!');

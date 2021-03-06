@@ -53,8 +53,9 @@ export const changeCartQty = createAsyncThunk(
     async (data) => {
         try {
             // const response = await ...
-            console.log('카트 ', data)
-            return data;
+            const response = await axios.post('user/changeCartQty', data);
+            
+            return response.data;
         } catch(err) {
             return err;
         }
@@ -133,7 +134,6 @@ export const userSlice = createSlice({
             // Add user to the state array
             state.myInfo = action.payload.myInfo;
             state.cart = action.payload.cart;
-            alert(JSON.stringify(action.payload.cart))
             state.logInDone = true;
         },
         [addCart.fulfilled]: (state, action) => {
@@ -151,27 +151,18 @@ export const userSlice = createSlice({
         [removeCart.fulfilled]: (state, action) => {
             // Add user to the state array
             state.cart = state.cart.filter((item) => item.cartId !== action.payload.cartId);
-            
             state.removeCartDone = true;
         },
         [changeCartQty.fulfilled]: (state, action) => {
             // Add user to the state array
-            let id = action.payload.id;
+            let cartId = action.payload.cartId;
             let qty= action.payload.qty;
-            let data = state.cart.find((item) => item.id === id);
-            data.qty = qty;
-        },
-        [changeCartQty.fulfilled]: (state, action) => {
-            // Add user to the state array
-            let id = action.payload.id;
-            let qty= action.payload.qty;
-            let data = state.cart.find((item) => item.id === id);
+            let data = state.cart.find((item) => item.cartId === cartId);
             data.qty = qty;
         },
         [removeSelectedCartItem.fulfilled]: (state, action) => {
-            alert(JSON.stringify(action.payload));
-            return;
-            state.cart = state.cart.filter(item => !item.checked);
+            let returnCartList = action.payload.checkedCart;
+            state.cart = state.cart.filter(item => returnCartList.indexOf(item.cartId) == -1);
 
             state.onRemoveCartDone = true;
         }
